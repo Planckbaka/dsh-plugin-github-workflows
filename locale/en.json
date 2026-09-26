@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "GitHub Workflows (gh CLI)",
+    "description": "Full GitHub workflows on top of the GitHub CLI: auth, repositories, pull requests, issues, commits, releases, Actions, Codespaces, search, and raw gh api access."
+  }
+}

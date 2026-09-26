@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "GitHub 工作流(gh CLI)",
+    "description": "基于 GitHub CLI 的完整 GitHub 工作流:认证、仓库、Pull Request、Issue、提交、Release、Actions、Codespaces、搜索与 gh api 透传。"
+  }
+}

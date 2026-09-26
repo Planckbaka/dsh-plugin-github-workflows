@@ -1,0 +1,15 @@
+# GitHub workflow plugin entry.
+# All config keys are optional; defaults live in lib/index.js (zero-dependency
+# Config projection, so local link installs work without dependencies).
+- insert:
+    - id: github
+      name: dsh-plugin-github
+      config:
+        ghPath: ""
+        defaultRepo: ""
+        timeoutMs: 60000
+        watchTimeoutMs: 300000
+        maxOutputBytes: 65536
+        allowRaw: false
+        allowDestructive: true
+        env: {}
