@@ -1,7 +1,7 @@
 {
   "name": "dsh-plugin-github-workflows",
   "description": "GitHub workflows for DeepSeek Harness (DSH): commits, pull requests, issues, releases, Actions, repositories, Codespaces and search - one zero-dependency plugin on the GitHub CLI.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "type": "module",
   "main": "lib/index.js",
   "icon": "./icon.svg",

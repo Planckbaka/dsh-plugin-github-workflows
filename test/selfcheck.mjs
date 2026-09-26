@@ -9,6 +9,7 @@
  *
  * Usage: node test/selfcheck.mjs
  */
+import { existsSync, statSync, unlinkSync } from 'node:fs'
 import { createRunner } from '../lib/gh.js'
 import { RESULT_SCHEMA } from '../lib/schema.js'
 
@@ -188,6 +189,30 @@ console.log(`    authInfo → ghAuthenticated=${authState.ghAuthenticated} gitCr
 if (typeof authState.ghAuthenticated !== 'boolean') fail('authInfo.ghAuthenticated must be boolean')
 if (authState.gitCredentialFallback && authState.ghAuthenticated) fail('fallback and ghAuthenticated are mutually exclusive')
 else pass('auth fallback chain resolves consistently')
+
+console.log('\n[7] Runner internals: truncation, spill file, quoting')
+{
+  const tiny = createRunner({
+    ghPath: '', gitPath: '', defaultRepo: '', timeoutMs: 15000, watchTimeoutMs: 30000,
+    maxOutputBytes: 1024, allowRaw: false, allowDestructive: true, env: {},
+  })
+  // `git log -p` of this repo's history reliably exceeds 1024 bytes.
+  const big = await tiny.runGit(['log', '-p', '-n', '20'], {})
+  if (!big.truncated) fail('git log -p should be truncated under a 1024B cap')
+  else pass(`truncation engaged (stdout ${big.stdout.length} chars in memory)`)
+  if (!big.spillPath || !existsSync(big.spillPath)) {
+    fail(`spill file missing or not on disk: ${big.spillPath}`)
+  } else {
+    const spillSize = statSync(big.spillPath).size
+    if (spillSize < 1024) fail(`spill file suspiciously small: ${spillSize} bytes`)
+    else pass(`spill file holds the tail (${spillSize} bytes)`)
+    try { unlinkSync(big.spillPath) } catch { /* best effort */ }
+  }
+
+  const quoted = await tiny.runGit(['log', '--grep', 'fix bug'], {})
+  if (!quoted.command.includes('"fix bug"')) fail(`spaces not quoted in command display: ${quoted.command}`)
+  else pass('command display quotes arguments containing spaces')
+}
 
 console.log(`\n${failures === 0 ? 'ALL CHECKS PASSED' : failures + ' FAILURES'}`)
 process.exit(failures === 0 ? 0 : 1)

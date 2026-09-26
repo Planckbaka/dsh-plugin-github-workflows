@@ -14,6 +14,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `checkJs`, and a CI `tsc --noEmit` step on both platforms. The plugin
   stays zero-dependency plain ESM — TypeScript is a dev-time check only.
 
+## [0.2.2] - 2026-09-26
+
+### Fixed
+- `authInfo` misreported `ghAuthenticated: true` when gh was unauthenticated
+  AND no git credential existed (the fallback-absence was conflated with
+  gh being logged in); the auth state is now a three-way resolved object
+  and startup logs an explicit "no credential found" warning.
+- `github_api` `paginate` parameter description now matches the behavior
+  (`--paginate --slurp` are applied together automatically).
+- SECURITY.md credential table rendering (malformed separator row).
+
+### Changed
+- `integration.mjs` rewritten as a hermetic assertion suite: a recording
+  fake runner (never spawns) verifies all safety gates (destructive
+  confirm / allowDestructive, needs, check, requiresRepo), argv / `--json`
+  / `--jq` / `--repo` injection, watch-vs-normal timeout routing, gh/git
+  binary routing, raw-passthrough blocking, render shape, and token
+  masking — 25+ hard assertions with a non-zero exit on failure.
+- `selfcheck.mjs` gains runner-internal tests: output truncation with a
+  real on-disk spill file (verified, then cleaned up) and command-display
+  quoting of arguments containing spaces.
+- `apply(ctx, config, runner?)` accepts an optional runner injection for
+  hermetic tests; host installations are unchanged.
+
 ## [0.2.1] - 2026-09-26
 
 ### Added

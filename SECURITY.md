@@ -18,7 +18,7 @@ except to `github.com` (or your configured `GH_HOST`) via the official
 `gh` CLI / GitHub REST API:
 
 | Auth source | How it travels | Logged? |
-|---|---|--- |
+|---|---|---|
 | gh's own login (`gh auth login`) | gh keyring, untouched by the plugin | No |
 | `GH_TOKEN` / `GITHUB_TOKEN` environment | inherited process environment | No |
 | PAT via `github_auth` action `setup` | piped through **stdin** of the gh child process — never in argv, never in the rendered command line or UI cards | No |
