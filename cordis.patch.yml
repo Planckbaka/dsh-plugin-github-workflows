@@ -3,7 +3,7 @@
 # Config projection, so local link installs work without dependencies).
 - insert:
     - id: github
-      name: dsh-plugin-github
+      name: dsh-plugin-github-workflows
       config:
         ghPath: ""
         gitPath: ""

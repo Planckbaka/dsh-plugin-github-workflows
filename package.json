@@ -1,7 +1,7 @@
 {
-  "name": "dsh-plugin-github",
-  "description": "GitHub workflow tools for the DeepSeek Harness built on the GitHub CLI (gh): authentication, repositories, pull requests, issues, commits, releases, Actions runs and workflows, Codespaces, search, and raw gh api access.",
-  "version": "0.2.0",
+  "name": "dsh-plugin-github-workflows",
+  "description": "GitHub workflows for DeepSeek Harness (DSH): commits, pull requests, issues, releases, Actions, repositories, Codespaces and search - one zero-dependency plugin on the GitHub CLI.",
+  "version": "0.2.1",
   "type": "module",
   "main": "lib/index.js",
   "icon": "./icon.svg",
@@ -17,9 +17,41 @@
     "cordis.patch.yml",
     "locale/*.json",
     "README.md",
-    "README.zh.md"
+    "README.zh-CN.md",
+    "LICENSE",
+    "CHANGELOG.md"
   ],
+  "scripts": {
+    "test": "node test/selfcheck.mjs",
+    "test:integration": "node test/integration.mjs",
+    "dump:argv": "node test/dump-argv.mjs"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "github",
+    "gh-cli",
+    "pull-request",
+    "issues",
+    "actions",
+    "releases",
+    "codespaces",
+    "cordis"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Planckbaka/dsh-plugin-github-workflows.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Planckbaka/dsh-plugin-github-workflows/issues"
+  },
+  "homepage": "https://github.com/Planckbaka/dsh-plugin-github-workflows#readme",
+  "author": "Planckbaka",
   "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "dsh": {
     "manifestVersion": 1,
     "bundle": {
