@@ -99,6 +99,8 @@ github_release    action: create   tag: v1.1.0, generateNotes: true
 
 ```bash
 git clone https://github.com/Planckbaka/dsh-plugin-github-workflows.git
+npm install --no-save typescript@5 @types/node   # 可选:类型检查
+npx tsc --noEmit                                  # JSDoc 类型,零构建
 npm test && npm run test:integration
 ```
 

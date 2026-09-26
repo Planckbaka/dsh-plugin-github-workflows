@@ -86,6 +86,29 @@ subject <= 72 chars, body explains "why" when non-obvious.
 3. Update `CHANGELOG.md` under `## [Unreleased]`.
 4. Open a PR using the template; CI (Ubuntu + Windows) must pass.
 
+## Type checking (TypeScript without a build step)
+
+This project is plain ESM JavaScript with **JSDoc types** (`lib/types.d.ts`)
+checked by `tsc --noEmit` — no transpiler, no committed build output.
+
+Why not full TypeScript? The plugin is installed directly from the git
+repository (`install_bundle → github:...`), so the repo itself must contain
+runnable JS. Full TS would require either committing built output (dual
+source of truth) or a `prepare` build hook — which pnpm 11 flags as a build
+script and prompts every installer to approve (`pendingBuilds`). JSDoc types
+give us the same structural guarantees on the domain tables (`DomainDef`,
+`ActionDef`), the runner (`Runner`, `RunResult`), and the config
+(`PluginConfig`) with none of that friction.
+
+Check types locally (nothing is added to package.json dependencies):
+
+```bash
+npm install --no-save typescript@5 @types/node
+npx tsc --noEmit
+```
+
+The type check runs in CI on every platform before the tests.
+
 ## Release process (maintainers)
 
 1. Bump `version` in `package.json`, move `CHANGELOG.md` `[Unreleased]` to

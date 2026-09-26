@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "es2022",
+    "lib": ["es2023"],
+    "skipLibCheck": true,
+    "strict": false,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["lib/**/*.js", "lib/**/*.d.ts", "test/**/*.mjs"]
+}

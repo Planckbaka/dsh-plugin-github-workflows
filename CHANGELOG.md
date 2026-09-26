@@ -5,6 +5,15 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Static type checking without a build step: `lib/types.d.ts` (JSDoc types
+  for `DomainDef`, `ActionDef`, `PluginConfig`, `Runner`, `RunResult`),
+  annotated domain tables and runner surface, `tsconfig.json` with
+  `checkJs`, and a CI `tsc --noEmit` step on both platforms. The plugin
+  stays zero-dependency plain ESM — TypeScript is a dev-time check only.
+
 ## [0.2.1] - 2026-09-26
 
 ### Added

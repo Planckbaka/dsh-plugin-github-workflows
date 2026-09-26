@@ -3,7 +3,11 @@ import rel from '../lib/domains/release.js'
 import act from '../lib/domains/actions.js'
 import cs from '../lib/domains/codespace.js'
 import cm from '../lib/domains/commit.js'
-const cfg = { defaultRepo: '', timeoutMs: 60000 }
+const cfg = {
+  ghPath: '', gitPath: '', defaultRepo: '', timeoutMs: 60_000,
+  watchTimeoutMs: 300_000, maxOutputBytes: 65_536,
+  allowRaw: false, allowDestructive: true, env: {},
+}
 const show = (label, argv) => console.log(label.padEnd(16), Array.isArray(argv) ? 'gh ' + argv.join(' ') : 'ERROR: ' + argv.error)
 show('pr create', pr.actions.create.argv({ title: 'Add feature', body: 'Fixes #1', base: 'main', head: 'feat/x', reviewers: ['alice'], draft: true }, cfg))
 show('pr merge', pr.actions.merge.argv({ number: 42, mergeMethod: 'squash', deleteBranch: true }, cfg))

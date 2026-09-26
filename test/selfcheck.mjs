@@ -128,9 +128,14 @@ let builtCommands = 0
 for (const domain of DOMAINS) {
   for (const [name, action] of Object.entries(domain.actions)) {
     const args = { action: name, ...sampleArgs(domain), ...(domain.gated ? { args: ['gist', 'list'] } : {}) }
+    const fullCfg = {
+      ghPath: '', gitPath: '', defaultRepo: 'owner/knock', timeoutMs: 60_000,
+      watchTimeoutMs: 300_000, maxOutputBytes: 65_536,
+      allowRaw: false, allowDestructive: true, env: {},
+    }
     let out
     try {
-      out = action.argv(args, { defaultRepo: 'owner/knock', timeoutMs: 60000 }, 'owner/knock')
+      out = action.argv(args, fullCfg, 'owner/knock')
     } catch (error) {
       fail(`${domain.tool}.${name}: argv threw ${error.message}`)
       continue

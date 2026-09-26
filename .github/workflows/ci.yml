@@ -21,6 +21,11 @@ jobs:
         with:
           node-version: 22
 
+      - name: Type check (JSDoc types + tsc --noEmit)
+        run: |
+          npm install --no-save typescript@5 @types/node
+          npx tsc --noEmit
+
       - name: Syntax-check every JS file
         shell: pwsh
         run: |

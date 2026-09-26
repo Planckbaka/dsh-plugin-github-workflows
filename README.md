@@ -107,6 +107,8 @@ plugin's `config` section (see [cordis.patch.yml](cordis.patch.yml)).
 
 ```bash
 git clone https://github.com/Planckbaka/dsh-plugin-github-workflows.git
+npm install --no-save typescript@5 @types/node   # optional: type checking
+npx tsc --noEmit                                  # JSDoc types, no build step
 npm test && npm run test:integration
 ```
 
