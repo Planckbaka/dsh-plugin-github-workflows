@@ -1,6 +1,6 @@
-# dsh-plugin-github
+# dsh-plugin-github-workflows
 
-A DeepSeek Harness (DSH) plugin: complete GitHub workflows on top of the [GitHub CLI](https://cli.github.com/) (`gh`).
+A DeepSeek Harness (DSH) plugin: complete GitHub workflows on top of the [GitHub CLI](https://cli.github.com/) (`gh`) — commits, pull requests, issues, releases, Actions, repositories, Codespaces and search, all in one plugin.
 
 ## Tools
 
@@ -71,7 +71,7 @@ The standard flow: `github_git` commit+push → `github_pr create` →
 Ask the agent to call `plugin_manager`, or use GUI Settings → Plugins → Install:
 
 ```
-install_bundle → target: github:Planckbaka/dsh-plugin-github
+install_bundle → target: github:Planckbaka/dsh-plugin-github-workflows
 ```
 
 ## Install (local development)

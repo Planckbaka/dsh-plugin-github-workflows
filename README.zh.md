@@ -1,6 +1,6 @@
-# dsh-plugin-github
+# dsh-plugin-github-workflows
 
-DeepSeek Harness (DSH) 插件:基于 [GitHub CLI](https://cli.github.com/) (`gh`) 的完整 GitHub 工作流。
+DeepSeek Harness (DSH) 插件:基于 [GitHub CLI](https://cli.github.com/) (`gh`) 的完整 GitHub 工作流 —— 提交、Pull Request、Issue、Release、Actions、仓库、Codespaces、搜索,一个插件全覆盖。
 
 ## 工具一览
 
@@ -65,7 +65,7 @@ DeepSeek Harness (DSH) 插件:基于 [GitHub CLI](https://cli.github.com/) (`gh`
 在 DSH 对话中让智能体调用 `plugin_manager`,或 GUI 设置 → 插件 → 安装插件:
 
 ```
-install_bundle → target: github:Planckbaka/dsh-plugin-github
+install_bundle → target: github:Planckbaka/dsh-plugin-github-workflows
 ```
 
 ## 安装与调试(本地开发)
