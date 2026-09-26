@@ -1,7 +1,7 @@
 {
   "name": "dsh-plugin-github",
   "description": "GitHub workflow tools for the DeepSeek Harness built on the GitHub CLI (gh): authentication, repositories, pull requests, issues, commits, releases, Actions runs and workflows, Codespaces, search, and raw gh api access.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "main": "lib/index.js",
   "icon": "./icon.svg",

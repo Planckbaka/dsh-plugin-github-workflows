@@ -6,6 +6,7 @@
       name: dsh-plugin-github
       config:
         ghPath: ""
+        gitPath: ""
         defaultRepo: ""
         timeoutMs: 60000
         watchTimeoutMs: 300000

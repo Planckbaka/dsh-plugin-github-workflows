@@ -23,8 +23,9 @@ import codespace from '../lib/domains/codespace.js'
 import search from '../lib/domains/search.js'
 import api from '../lib/domains/api.js'
 import cli from '../lib/domains/cli.js'
+import git from '../lib/domains/git.js'
 
-const DOMAINS = [auth, repo, pr, issue, commit, release, actions, codespace, search, api, cli]
+const DOMAINS = [auth, repo, pr, issue, commit, release, actions, codespace, search, api, cli, git]
 
 const ALLOWED = new Set([
   'type', 'oneOf', 'properties', 'required', 'additionalProperties', 'items', 'enum', 'const',
@@ -155,7 +156,7 @@ else pass('release.create.check accepts generateNotes')
 
 console.log('\n[5] gh runner end-to-end (read-only)')
 const runner = createRunner({
-  ghPath: '', defaultRepo: '', timeoutMs: 15000, watchTimeoutMs: 30000,
+  ghPath: '', gitPath: '', defaultRepo: '', timeoutMs: 15000, watchTimeoutMs: 30000,
   maxOutputBytes: 4096, allowRaw: false, allowDestructive: true, env: {},
 })
 const version = await runner.run(['--version'], {})
@@ -172,6 +173,16 @@ if (authStatus.exitCode !== 0 && authStatus.exitCode !== 4 && authStatus.exitCod
 const missing = await runner.run(['definitely', 'not-a-command'], {})
 if (missing.ok) fail('unknown command should fail')
 else pass(`unknown command → exit ${missing.exitCode}, stderr captured (${missing.stderr.length} chars)`)
+
+console.log('\n[6] git runner + credential fallback')
+const gitVersion = await runner.runGit(['--version'], {})
+if (!gitVersion.ok || !gitVersion.stdout.includes('git version')) fail('git --version failed: ' + gitVersion.stderr)
+else pass(`git --version → ${gitVersion.stdout.split('\n')[0].trim()}`)
+const authState = await runner.authInfo()
+console.log(`    authInfo → ghAuthenticated=${authState.ghAuthenticated} gitCredentialFallback=${authState.gitCredentialFallback}`)
+if (typeof authState.ghAuthenticated !== 'boolean') fail('authInfo.ghAuthenticated must be boolean')
+if (authState.gitCredentialFallback && authState.ghAuthenticated) fail('fallback and ghAuthenticated are mutually exclusive')
+else pass('auth fallback chain resolves consistently')
 
 console.log(`\n${failures === 0 ? 'ALL CHECKS PASSED' : failures + ' FAILURES'}`)
 process.exit(failures === 0 ? 0 : 1)
