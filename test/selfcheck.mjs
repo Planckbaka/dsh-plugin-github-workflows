@@ -9,7 +9,10 @@
  *
  * Usage: node test/selfcheck.mjs
  */
-import { existsSync, statSync, unlinkSync } from 'node:fs'
+import { execFileSync } from 'node:child_process'
+import { existsSync, mkdtempSync, readFileSync, rmSync, statSync, unlinkSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { createRunner } from '../lib/gh.js'
 import { RESULT_SCHEMA } from '../lib/schema.js'
 
@@ -207,6 +210,45 @@ console.log('\n[7] Runner internals: truncation, spill file, quoting')
     if (spillSize < 1024) fail(`spill file suspiciously small: ${spillSize} bytes`)
     else pass(`spill file holds the tail (${spillSize} bytes)`)
     try { unlinkSync(big.spillPath) } catch { /* best effort */ }
+  }
+
+  // A known UTF-8 stream: 1024 lands inside a three-byte CJK code point.
+  const dir = mkdtempSync(join(tmpdir(), 'dsh-gh-cjk-'))
+  let cjkSpillPath = ''
+  try {
+    execFileSync('git', ['init', '--quiet', dir])
+    execFileSync('git', [
+      '-c', 'user.name=x', '-c', 'user.email=x@y', '-c', 'commit.gpgsign=false',
+      'commit', '--quiet', '--allow-empty', '--no-verify', '-m', '中文'.repeat(2000),
+    ], { cwd: dir })
+    const argv = ['-C', dir, 'log', '-1', '--format=%B']
+    const full = execFileSync('git', argv)
+    const cjk = await tiny.runGit(argv, {})
+    cjkSpillPath = cjk.spillPath
+    const memoryBytes = Buffer.byteLength(cjk.stdout, 'utf8')
+    if (!cjk.ok || cjk.stderr) fail('CJK git log failed: ' + cjk.stderr)
+    if (memoryBytes > 1024) fail(`CJK stdout exceeds byte cap: ${memoryBytes}`)
+    else pass(`CJK stdout fits byte cap (${memoryBytes} bytes)`)
+    if (cjk.stdout.includes('�')) fail('CJK stdout contains a split UTF-8 code point')
+    else pass('CJK stdout has no replacement characters')
+    if (!cjk.truncated) fail('CJK stdout should be truncated')
+    else pass('CJK truncation engaged')
+    if (!cjkSpillPath || !existsSync(cjkSpillPath)) {
+      fail('CJK spill file missing')
+    } else {
+      const spill = readFileSync(cjkSpillPath)
+      if (statSync(cjkSpillPath).size + memoryBytes !== full.length) {
+        fail('CJK spill size + memory bytes must equal full output bytes')
+      } else pass('CJK spill and memory byte totals match full output')
+      if (!Buffer.concat([Buffer.from(cjk.stdout, 'utf8'), spill]).equals(full)) {
+        fail('CJK memory prefix + spill tail must reproduce full output without duplication')
+      } else pass('CJK memory + spill reproduce the exact original bytes')
+    }
+  } finally {
+    if (cjkSpillPath) {
+      try { unlinkSync(cjkSpillPath) } catch { /* best effort */ }
+    }
+    rmSync(dir, { recursive: true, force: true })
   }
 
   const quoted = await tiny.runGit(['log', '--grep', 'fix bug'], {})
