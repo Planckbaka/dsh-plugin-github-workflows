@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `checkJs`, and a CI `tsc --noEmit` step on both platforms. The plugin
   stays zero-dependency plain ESM — TypeScript is a dev-time check only.
 
+### Fixed
+- Runner output caps now count bytes per channel, preserve complete UTF-8
+  code points across chunks, and spill only the remaining bytes without
+  duplicating the in-memory prefix (#1).
+
 ## [0.2.2] - 2026-09-26
 
 ### Fixed
